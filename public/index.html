@@ -1,34 +1,44 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
 <head>
-  <meta charset="utf-8">
   <title>Big Davie's Boat Ride</title>
-  <link rel="stylesheet" href="./css/style.css">
   <script src="./js/bundle.js"></script>
+  <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
-  <header>
-    <h1>Big Davie Attenborough's Boat Ride</h1>
-  </header>
+
+  <h1>Big Davie Attenborough's Boat Ride</h1>
+
   <div id="app">
 
-    <h2>World Population: {{totalWorldPopulation}}</h2>
+    <h2>Global Population: {{ totalWorldPopulation }}<h2>
 
-    <div id="filterInput">
-      <h3>Filter Countries By Name</h3>
-      <select v-model="selectedCountry">
-        <option disabled value="">Please Select a Country</option>
-        <option v-for="country in allCountries" :value="country">{{country.name}}</option>
-      </select>
-    </div>
+      <div id="filterInput">
+        <h3>Filter Countries By Name</h3>
+        <select v-model="selectedCountry">
+          <option disabled value="">Please Select a Country</option>
+          <option v-for="country in allCountries" :value="country">{{country.name}}</option>
+        </select>
+      </div>
 
-    <section>
       <div v-if="selectedCountry" class="selectedCountry">
         <h2>{{ selectedCountry.name }}</h2>
-        <img :src="selectedCountry.flag"/>
-      </section>
-    </div>
-  </div>
+        <p>Population: {{selectedCountry.population}}</p>
+        <img class="lrg-flag" :src="selectedCountry.flag"/>
+        <button v-if="!favouriteCountries.includes(selectedCountry)" v-on:click"addToFavourites">Add</button>
 
-</body>
-</html>
+        <div v-if="neighbouringCountries.length" id="neighbouring_countries">
+          <h3>Neighbouring Countries</h3>
+          <p>Total population for neighbouring countries: {{ neighbouringCountriesPopulation }}</p>
+          <ul id="neighbouring_countries">
+            <li v-for="neighbouringCountry in neighbouringCountries">
+              <p>{{neighbouringCountry.name}}</p>
+              <img class="med-flag "src="neighbouringCountry.flag">
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </body>
+  </html>

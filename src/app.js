@@ -1,28 +1,40 @@
 import Vue from 'vue';
 
-document.addEventListener('DOMContentLoaded', () =>{
+document.addEventListener("DOMContentLoaded", () => {
   new Vue({
-    el: '#app',
+    el: "#app",
     data: {
       allCountries: [],
-      selectedCountry: null
-      // filterCountry: 0,
-    },
-    mounted(){
-      this.locateCountry();
+      selectedCountry: null,
+      favouriteCountries: []
     },
     computed: {
       totalWorldPopulation: function(){
-        return this.allCountries.reduce((runningTotal, country) => {
-          return runningTotal + country.population;
-        }, 0);
+        return this.populationCalculator(this.allCountries);``
       },
+      neighbouringCountries: function(){
+        return this.allCountries.filter((country) => {
+          return this.selectedCountry.borders.includes(country.alpha3Code);
+        });
+      },
+      neighbouringCountriesPopulation: function(){
+        return this.populationCalculator(this.neighbouringCountries);
+      }
     },
-    methods:{
-      locateCountry: function(){
-        const request = fetch("https://restcountries.eu/rest/v2/all")
-        .then(response => response.json())
-        .then(data => this.allCountries = data)
+    mounted(){
+      this.getCountries()
+    },
+    methods: {
+      getCountries: function(){
+        fetch("https://restcountries.eu/rest/v2/all")
+        .then(res => res.json())
+        .then(countries => this.allCountries = countries)
+      },
+      addToFavourites: function(){
+        this.favouriteCountries.push(this.selectedCountry)
+      },
+      populationCalculator: function(allCountries){
+        return allCountries.reduce((runningTotal, country) => runningTotal + country.population, 0);
       }
     }
   })
